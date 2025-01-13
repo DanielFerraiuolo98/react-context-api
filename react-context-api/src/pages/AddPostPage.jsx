@@ -1,7 +1,8 @@
-import { useEffect, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { tags } from "../posts";
 import axios from "axios";
+import PostContext from "../Context/PostContext";
 
 const apiUrl = "http://localhost:3000"
 
@@ -18,6 +19,8 @@ function AddPostPage() {
     const [formData, setFormData] = useState(nuovoPost);
     //const [posts, setPosts] = useState([]);
     const [newPost, setNewPost] = useState(null);
+
+    const { posts, setPosts } = useContext(PostContext);
 
     const navigate = useNavigate();
 
@@ -59,8 +62,8 @@ function AddPostPage() {
         axios
             .post(apiUrl + "/examples", formData) // Invio dei dati al server
             .then((res) => {
-                setPosts((prevPosts) => [...prevPosts, formData]); // Aggiungi il nuovo post alla lista locale
-                setNewPost(formData); // Imposta il nuovo post per la visualizzazione
+                setPosts((prevPosts) => [...prevPosts, res.data]); // Aggiungi il nuovo post alla lista locale
+                setNewPost(res.data); // Imposta il nuovo post per la visualizzazione
                 setFormData(nuovoPost); // Reset del form
                 const id = res.data.id;
                 //navigate("/posts/" + id);

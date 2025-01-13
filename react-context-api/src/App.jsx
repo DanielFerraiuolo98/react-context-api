@@ -9,7 +9,6 @@ import DefaultLayout from './pages/DefaultLayout';
 import AddPostPage from './pages/AddPostPage';
 import PostPage from './pages/PostPage';
 import notFoundPage from './pages/notFoundPage';
-import PostContext from "./Context/PostContext";
 import { PostsProvider } from './Context/PostContext';
 import { useEffect, useState } from "react";
 import axios from "axios";
@@ -32,27 +31,25 @@ function App() {
   };
 
   return (
-    <PostContext.Provider value={{ posts, setPosts }}>
-      <PostsProvider>
-        <BrowserRouter>
-          <Routes>
-            <Route Component={DefaultLayout}>
-              <Route path="/" Component={HomePage} />
+    <PostsProvider>
+      <BrowserRouter>
+        <Routes>
+          <Route Component={DefaultLayout}>
+            <Route path="/" Component={HomePage} />
+            <Route index Component={PostsPage} />
+            <Route path="/contact" Component={ContactPage} />
+            <Route path="/about" Component={AboutPage} />
+            <Route path="/posts">
               <Route index Component={PostsPage} />
-              <Route path="/contact" Component={ContactPage} />
-              <Route path="/about" Component={AboutPage} />
-              <Route path="/posts">
-                <Route index Component={PostsPage} />
-                <Route path=":id" Component={PostPage} />
-                <Route path="create" Component={AddPostPage} />
-                <Route path="ricette" element={<Navigate to="/posts" />} />
-              </Route>
+              <Route path=":id" Component={PostPage} />
+              <Route path="create" Component={AddPostPage} />
+              <Route path="ricette" element={<Navigate to="/posts" />} />
             </Route>
-            <Route path="*" Component={notFoundPage} />
-          </Routes>
-        </BrowserRouter>
-      </PostsProvider>
-    </PostContext.Provider>
+          </Route>
+          <Route path="*" Component={notFoundPage} />
+        </Routes>
+      </BrowserRouter>
+    </PostsProvider>
   )
 }
 

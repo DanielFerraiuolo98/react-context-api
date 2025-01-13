@@ -17,20 +17,21 @@ const newPost = {
 }
 
 function Main() {
-    const [blog, setBlog] = useState([])//useState(posts);
     const [formData, setFormData] = useState(newPost);
     const [search, setSearch] = useState("");
-    //const [examples, setExamples] = useState([]);
-    const filteredBlog = filterItems(blog, search);
+
+    // Accedo allo stato globale dei post e alla funzione per aggiornarlo
     const { post, setPost } = useContext(PostContext);
 
-    //chiamata axios
+    // Filtrare i post in base alla ricerca
+    const filteredBlog = filterItems(post, search);
+
+    // Funzione per ottenere i dati dal server
     function getData() {
         axios.get(apiUrl)
             .then((res) => {
                 console.log(res.data);
-                setBlog(res.data.data);
-                //setExamples(res.data.results);
+                setPost(res.data.data); // Aggiorna lo stato globale con i dati dal server
             })
             .catch((error) => {
                 console.error("Errore nel recupero dei dati:", error);
@@ -38,50 +39,26 @@ function Main() {
     }
 
     useEffect(() => {
-        getData();
+        getData(); // Carica i dati al primo rendering
     }, []);
 
+    // Funzione per eliminare un post
     function deletePost(id) {
         axios.delete(apiUrl + "/" + id).then((res) => {
             console.log(res.data);
-            getData(search);
+            // Aggiorna la lista dei post nello stato globale
+            setPost((prevPosts) => prevPosts.filter((post) => post.id !== id));
         });
     }
 
+    // Gestione dell'input
     function handleInput(e) {
         const value =
             e.target.type === "checkbox" ? e.target.checked : e.target.value;
         setFormData({ ...formData, [e.target.name]: value });
     }
 
-    // Funzione per ottenere i post dal server
-    const getPosts = () => {
-        axios
-            .get(apiUrl + "/examples")
-            .then((res) => {
-                console.log(res.data);
-                getPosts(res.data.data);
-            })
-            .catch((error) => {
-                console.error('Errore nel recupero dei post:', error);
-            });
-    };
-
-    function handleTags(e) {
-        setFormData((formData) => {
-            let { tags, ...others } = formData;
-            if (tags.includes(e.target.value)) {
-                tags = tags.filter((val) => val !== e.target.value);
-            }
-            else {
-                tags = [...tags, e.target.value]
-            }
-            return {
-                tags, ...others
-            }
-        });
-    }
-
+    // Gestione della ricerca
     function handleSearch(e) {
         setSearch(e.target.value);
     }
@@ -106,7 +83,7 @@ function Main() {
                             categoria={post.categoria}
                             published={post.published}
                             id={post.id}
-                            onDelete={() => deletePost(post.id)}
+                            onDelete={() => deletePost(post.id)} // Funzione di eliminazione
                         />
                     </div>
                 ))}
