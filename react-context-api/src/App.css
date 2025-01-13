@@ -1,0 +1,51 @@
+#root {
+  margin: 0 auto;
+  padding: 2rem;
+  text-align: center;
+}
+
+body {
+  background-color: #e5e5e5;
+}
+
+.main-container {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+}
+
+.container-lista {
+  width: 100%;
+}
+
+.lista {
+  text-align: center;
+}
+
+ul {
+  list-style: none;
+  display: flex;
+}
+
+.card-container {
+  width: 300px;
+}
+
+.card {
+  margin: 0 auto;
+  text-align: left;
+}
+
+img {
+  width: 300px;
+}
+
+footer {
+  background-color: #2f2f2f;
+  width: 100%;
+  margin-top: 20px;
+}
+
+footer p {
+  color: white;
+}
