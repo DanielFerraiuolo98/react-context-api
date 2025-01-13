@@ -18,12 +18,16 @@ const apiUrl = "http://localhost:3000";
 function App() {
   const [posts, setPosts] = useState([]);
 
+  useEffect(() => {
+    getPosts();
+  }, []);
+
   const getPosts = () => {
     axios
       .get(apiUrl + "/examples")
       .then((res) => {
         console.log(res.data);
-        getPosts(res.data.data);
+        setPosts(res.data.data);
       })
       .catch((error) => {
         console.error('Errore nel recupero dei post:', error);
